@@ -23,7 +23,7 @@
       (#(sort-by :points %))
       reverse))
 
-(defn add-hn-to-menu [menu]
+(defn add-hn-to-menu! [menu]
   (letfn [(mapfn [{:keys [title url commentCount points]}]
             (let [full-title (format "%-4s (%-4s) - %s" points commentCount title)
                   menu-item (menu-item full-title #(browse-url url))]
@@ -46,7 +46,7 @@
     (loop []
       (let [popup (PopupMenu.)]
         (println "Updating items")
-        (add-hn-to-menu popup)
+        (add-hn-to-menu! popup)
         (.add popup exit)
         (.setPopupMenu icon popup)
         (Thread/sleep (* 5 60 1000))
