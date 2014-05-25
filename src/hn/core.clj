@@ -19,13 +19,11 @@
   (-> hn-api-url
       slurp
       (json/parse-string true)
-      :items
-      (#(sort-by :points %))
-      reverse))
+      :items))
 
 (defn add-hn-to-menu! [menu]
   (letfn [(mapfn [{:keys [title url commentCount points]}]
-            (let [full-title (format "%-4s (%-4s) - %s" points commentCount title)
+            (let [full-title (format "%s - %s(%s)" title points commentCount)
                   menu-item (menu-item full-title #(browse-url url))]
               (println full-title)
               (.add menu menu-item)))]
