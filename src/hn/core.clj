@@ -50,7 +50,7 @@
                 (println full-title)
                 (.add menu menu-item)))]
       (doall (map mapfn new-items))
-      (if (seq old-items)
+      (when (seq old-items)
         (add-spacer! menu))
       (doall (map mapfn old-items)))))
 
