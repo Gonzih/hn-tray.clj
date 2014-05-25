@@ -15,7 +15,7 @@
 (defn mark-as-read [id]
   (swap! history conj id))
 
-(defn menu-item [label callback & {id :id}]
+(defn new-menu-item [label callback & {id :id}]
   (let [menu (MenuItem. label)
         listener (proxy [ActionListener] []
                    (actionPerformed [event]
@@ -40,13 +40,13 @@
   (.add menu (MenuItem. "-")))
 
 (defn add-exit! [menu]
-  (.add menu (menu-item "Exit" exit)))
+  (.add menu (new-menu-item "Exit" exit)))
 
 (defn add-hn-to-menu! [menu]
   (let [{new-items true old-items false} (group-by is-new? (hn-items))]
     (letfn [(mapfn [{:keys [id title url commentCount points]}]
               (let [full-title (format "%s - %s (%s)" title points commentCount)
-                    menu-item (menu-item full-title #(browse-url url) :id id)]
+                    menu-item (new-menu-item full-title #(browse-url url) :id id)]
                 (println full-title)
                 (.add menu menu-item)))]
       (doall (map mapfn new-items))
