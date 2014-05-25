@@ -1,4 +1,4 @@
-(defproject hn "0.1.0-SNAPSHOT"
+(defproject hn "0.1.1-SNAPSHOT"
   :description "HN Tray"
   :url "https://github.com/Gonzih/hn-tray.clj"
   :license {:name "Eclipse Public License"
