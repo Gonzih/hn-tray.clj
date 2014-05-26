@@ -61,6 +61,8 @@
         icon (TrayIcon. image) ]
     (.setImageAutoSize icon true)
     (.add tray icon)
+    (when-not (SystemTray/isSupported)
+      (throw (Exception. "System tray is not supported.")))
     (loop []
       (try
         (let [popup (PopupMenu.)]
