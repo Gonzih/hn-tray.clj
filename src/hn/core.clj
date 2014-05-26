@@ -2,8 +2,8 @@
   (:require [cheshire.core :as json]
             [clojure.java.browse :refer [browse-url]]
             [clojure.java.io :refer [resource]])
-  (:import [java.awt SystemTray TrayIcon PopupMenu MenuItem Toolkit]
-           [java.awt.event ActionListener]
+  (:import [java.awt SystemTray TrayIcon PopupMenu MenuItem Toolkit Frame]
+           [java.awt.event ActionListener MouseEvent MouseAdapter]
            [java.io IOException])
   (:gen-class))
 
@@ -54,13 +54,29 @@
         (add-spacer! menu))
       (doall (map mapfn old-items)))))
 
+(defn add-left-click! [icon frame]
+  (.setResizable frame false)
+  (.setVisible frame true)
+  (let [listener (proxy [MouseAdapter] []
+                   (mouseClicked [event]
+                     (when (== (.getButton event)
+                               MouseEvent/BUTTON1)
+                       (let [popup (.getPopupMenu icon)
+                             x (.getXOnScreen event)
+                             y (.getYOnScreen event)]
+                         (.add frame popup)
+                         (.show popup frame x y)))))]
+    (.addMouseListener icon listener)))
+
 (defn -main [& args]
   (let [tray (SystemTray/getSystemTray)
+        frame (Frame. "")
         image (.getImage (Toolkit/getDefaultToolkit)
                          (resource "icon.png"))
         icon (TrayIcon. image) ]
     (.setImageAutoSize icon true)
     (.add tray icon)
+    (add-left-click! icon frame)
     (when-not (SystemTray/isSupported)
       (throw (Exception. "System tray is not supported.")))
     (loop []
