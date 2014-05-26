@@ -54,15 +54,18 @@
         (add-spacer! menu))
       (doall (map mapfn old-items)))))
 
+(defn throw-unless-tray-supported! []
+  (when-not (SystemTray/isSupported)
+    (throw (Exception. "System tray is not supported."))))
+
 (defn -main [& args]
+  (throw-unless-tray-supported!)
   (let [tray (SystemTray/getSystemTray)
         image (.getImage (Toolkit/getDefaultToolkit)
                          (resource "icon.png"))
         icon (TrayIcon. image) ]
     (.setImageAutoSize icon true)
     (.add tray icon)
-    (when-not (SystemTray/isSupported)
-      (throw (Exception. "System tray is not supported.")))
     (loop []
       (try
         (let [popup (PopupMenu.)]
