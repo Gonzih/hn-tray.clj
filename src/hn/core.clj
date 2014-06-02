@@ -10,6 +10,7 @@
 
 (def history (atom #{}))
 (def current-popup (atom nil))
+(def opener (agent nil))
 
 (defn is-new? [{id :id}]
   (not (contains? @history id)))
@@ -51,7 +52,7 @@
   (let [{new-items true old-items false} (group-by is-new? (hn-items))]
     (letfn [(mapfn [{:keys [id title url commentCount points]}]
               (let [full-title (format "%s - %s (%s)" title points commentCount)
-                    menu-item (new-menu-item full-title #(browse-url url) :id id)]
+                    menu-item (new-menu-item full-title #(send-off opener (fn [_] (browse-url url))) :id id)]
                 (println full-title)
                 (.add menu menu-item)))]
       (doall (map mapfn new-items))
