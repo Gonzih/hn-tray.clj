@@ -13,6 +13,8 @@
 (def opener (agent nil))
 (def cached-data (atom []))
 
+(declare update-popup!)
+
 (defn is-new? [{id :id}]
   (not (contains? @history id)))
 
@@ -24,7 +26,9 @@
         listener (proxy [ActionListener] []
                    (actionPerformed [event]
                      (callback)
-                     (if id (mark-as-read id))))]
+                     (if id (mark-as-read id))
+                     (future
+                       (update-popup!))))]
     (.addActionListener menu listener)
     menu))
 
