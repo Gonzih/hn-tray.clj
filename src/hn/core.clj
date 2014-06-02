@@ -70,9 +70,10 @@
                      (let [popup @current-popup
                            x (.getXOnScreen event)
                            y (.getYOnScreen event)]
-                       (.setLocation popup x y)
-                       (.setInvoker popup popup)
-                       (.setVisible popup true))))]
+                       (when popup
+                         (.setLocation popup x y)
+                         (.setInvoker popup popup)
+                         (.setVisible popup true)))))]
     (.addMouseListener icon listener)))
 
 (defn set-native-look! []
