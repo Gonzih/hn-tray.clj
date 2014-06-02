@@ -101,7 +101,8 @@
       (update-popup!)
       (Thread/sleep (* 5 60 1000)))
     (catch IOException e
-      (println (str "Exception during update " e)))))
+      (println (str "Exception during update " e))
+      (Thread/sleep (* 10 1000)))))
 
 (defn -main [& args]
   (throw-unless-tray-supported!)
