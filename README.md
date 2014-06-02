@@ -1,6 +1,6 @@
 # HN Tray
 
-A Clojure implementation of simple tray with news from front page of HN using java.awt.
+A Clojure implementation of simple tray with news from front page of HN using java.awt, javax.swing.
 
 ## Usage
 
