@@ -91,8 +91,7 @@
     (add-separator! popup)
     (add-exit! popup)
     (add-hide! popup)
-    (reset! current-popup popup)
-    (Thread/sleep (* 5 60 1000))))
+    (reset! current-popup popup)))
 
 (defn update-data! []
   (try
