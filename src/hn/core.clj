@@ -4,7 +4,7 @@
             [clojure.java.io :refer [resource]])
   (:import [java.awt SystemTray TrayIcon Toolkit]
            [java.awt.event ActionListener MouseAdapter]
-           [javax.swing JPopupMenu JMenuItem]
+           [javax.swing JPopupMenu JMenuItem UIManager]
            [java.io IOException])
   (:gen-class))
 
@@ -75,8 +75,12 @@
                        (.setVisible popup true))))]
     (.addMouseListener icon listener)))
 
+(defn set-native-look! []
+  (UIManager/setLookAndFeel (UIManager/getSystemLookAndFeelClassName)))
+
 (defn -main [& args]
   (throw-unless-tray-supported!)
+  (set-native-look!)
   (let [tray (SystemTray/getSystemTray)
         image (.getImage (Toolkit/getDefaultToolkit)
                          (resource "icon.png"))
