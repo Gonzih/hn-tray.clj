@@ -44,6 +44,9 @@
 (defn add-exit! [menu]
   (.add menu (new-menu-item "Exit" exit)))
 
+(defn add-hide! [menu]
+  (.add menu (new-menu-item "Hide" #())))
+
 (defn add-hn-to-menu! [menu]
   (let [{new-items true old-items false} (group-by is-new? (hn-items))]
     (letfn [(mapfn [{:keys [id title url commentCount points]}]
@@ -84,6 +87,7 @@
           (add-hn-to-menu! popup)
           (add-separator! popup)
           (add-exit! popup)
+          (add-hide! popup)
           (reset! current-popup popup)
           (Thread/sleep (* 5 60 1000)))
         (catch IOException e
