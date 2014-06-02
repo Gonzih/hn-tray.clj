@@ -2,8 +2,8 @@
   (:require [cheshire.core :as json]
             [clojure.java.browse :refer [browse-url]]
             [clojure.java.io :refer [resource]])
-  (:import [java.awt SystemTray TrayIcon PopupMenu MenuItem Toolkit Frame]
-           [java.awt.event ActionListener MouseEvent MouseAdapter]
+  (:import [java.awt SystemTray TrayIcon Toolkit]
+           [java.awt.event ActionListener MouseAdapter]
            [javax.swing JPopupMenu JMenuItem]
            [java.io IOException])
   (:gen-class))
