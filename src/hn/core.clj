@@ -2,8 +2,8 @@
   (:require [cheshire.core :as json]
             [clojure.java.browse :refer [browse-url]]
             [clojure.java.io :refer [resource]])
-  (:import [java.awt SystemTray TrayIcon Toolkit]
-           [java.awt.event ActionListener MouseAdapter]
+  (:import [java.awt SystemTray TrayIcon Toolkit AWTEvent]
+           [java.awt.event ActionListener MouseAdapter AWTEventListener MouseEvent WindowEvent]
            [javax.swing JPopupMenu JMenuItem]
            [java.io IOException])
   (:gen-class))
@@ -70,6 +70,19 @@
                        (.setVisible popup true))))]
     (.addMouseListener icon listener)))
 
+(defn add-global-event! []
+  (let [listener (proxy [AWTEventListener] []
+                   (eventDispatched [event]
+                     (when (#{WindowEvent/WINDOW_DEACTIVATED
+                              WindowEvent/WINDOW_STATE_CHANGED
+                              MouseEvent/MOUSE_CLICKED}
+                             (.getID event))
+                       (.setVisible @current-popup false))))]
+    (.addAWTEventListener (Toolkit/getDefaultToolkit)
+                          listener
+                          (bit-or AWTEvent/MOUSE_EVENT_MASK
+                                  AWTEvent/WINDOW_EVENT_MASK))))
+
 (defn -main [& args]
   (let [tray (SystemTray/getSystemTray)
         image (.getImage (Toolkit/getDefaultToolkit)
@@ -78,6 +91,7 @@
     (.setImageAutoSize icon true)
     (.add tray icon)
     (add-left-click! icon)
+    (add-global-event!)
     (when-not (SystemTray/isSupported)
       (throw (Exception. "System tray is not supported.")))
     (loop []
