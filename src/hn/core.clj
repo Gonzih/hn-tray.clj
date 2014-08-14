@@ -32,7 +32,7 @@
     (.addActionListener menu listener)
     menu))
 
-(def hn-api-url "http://api.ihackernews.com/page")
+(def hn-api-url "http://hn.gonzih.me")
 
 (defn hn-items []
   (-> hn-api-url
